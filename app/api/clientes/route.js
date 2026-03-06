@@ -12,10 +12,10 @@ export async function GET(request) {
     const where = {}
     if (search) {
       where.OR = [
-        { empresa: { contains: search } },
-        { contacto: { contains: search } },
-        { nit: { contains: search } },
-        { email: { contains: search } },
+        { empresa: { contains: search, mode: 'insensitive' } },
+        { contacto: { contains: search, mode: 'insensitive' } },
+        { nit: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
       ]
     }
     if (ciudad) where.ciudad = ciudad
