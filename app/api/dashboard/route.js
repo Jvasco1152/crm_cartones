@@ -79,7 +79,7 @@ export async function GET() {
       topOportunidades,
     })
   } catch (error) {
-    console.error('Dashboard error:', error)
-    return NextResponse.json({ error: 'Error cargando dashboard' }, { status: 500 })
+    console.error('Dashboard error:', error?.message || error)
+    return NextResponse.json({ error: error?.message || 'Error cargando dashboard' }, { status: 500 })
   }
 }

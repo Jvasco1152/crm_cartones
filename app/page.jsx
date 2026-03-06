@@ -40,11 +40,16 @@ function KPICard({ icon: Icon, label, value, sub, color = 'blue' }) {
 export default function Dashboard() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     fetch('/api/dashboard')
       .then((r) => r.json())
-      .then(setData)
+      .then((d) => {
+        if (d.error) setError(d.error)
+        else setData(d)
+      })
+      .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
   }, [])
 
@@ -52,6 +57,18 @@ export default function Dashboard() {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-gray-400 text-sm">Cargando dashboard...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="card p-8 max-w-md text-center">
+          <p className="text-red-600 font-semibold mb-2">Error de conexión</p>
+          <p className="text-gray-500 text-sm">{error}</p>
+          <p className="text-gray-400 text-xs mt-3">Verifica las variables de entorno DATABASE_URL y DIRECT_URL en Vercel.</p>
+        </div>
       </div>
     )
   }
