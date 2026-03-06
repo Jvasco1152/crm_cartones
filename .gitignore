@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Database (local only)
+*.db
+*.db-journal
+dev.db
+
+# Environment variables (contain secrets)
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+*.log
+
+# Prisma
+prisma/migrations/
+
+# Build
+dist/
+build/

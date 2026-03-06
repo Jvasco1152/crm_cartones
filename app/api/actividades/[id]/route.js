@@ -1,0 +1,11 @@
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/db'
+
+export async function DELETE(request, { params }) {
+  try {
+    await prisma.actividad.delete({ where: { id: params.id } })
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    return NextResponse.json({ error: 'Error eliminando actividad' }, { status: 500 })
+  }
+}
