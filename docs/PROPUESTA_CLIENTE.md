@@ -149,39 +149,46 @@ El sistema tiene integrado el contexto del mercado colombiano:
 | Componente | Tecnología |
 |-----------|-----------|
 | Aplicación web | Next.js 16 (moderno, rápido, seguro) |
-| Base de datos | SQLite local (sin servidor externo, datos en tu equipo) |
+| Base de datos en la nube | PostgreSQL en Neon (serverless, siempre disponible) |
+| Hosting | Vercel (CDN global, deploy automático desde GitHub) |
 | Inteligencia Artificial | Groq API con modelo Llama 3.3 70B de Meta |
 | Diseño | TailwindCSS (interfaz limpia y profesional) |
 
-**No requiere internet para funcionar** (excepto el módulo de IA que consume la API de Groq).
+**Accesible desde cualquier dispositivo con internet** — computador, celular o tablet.
 
 ---
 
-## Cómo se instala
+## Cómo acceder
 
+El sistema ya está desplegado y funcionando en la nube:
+
+```
+https://crm-cartones.vercel.app
+```
+
+Sin instalaciones. Sin configuraciones. Abre el enlace desde cualquier navegador y empieza a usarlo.
+
+**Para desarrollo o uso local** (opcional):
 ```
 1. Instalar Node.js en el computador (gratuito)
 2. Ejecutar: npm run setup
 3. Abrir el navegador en: http://localhost:3000
 ```
 
-Listo. En menos de 5 minutos el sistema está operativo con datos de ejemplo listos para explorar.
-
 ---
 
 ## Costo de operación mensual
 
-| Servicio | Costo |
-|---------|-------|
-| La aplicación CRM | $0 (código propio) |
-| Groq API (IA) | $0 en el plan gratuito (suficiente para uso diario) |
-| Servidor local | $0 (corre en el computador de la comercial) |
-| **Total** | **$0/mes** |
+El sistema ya está en producción en la nube con costo cero:
 
-**Para publicarlo en internet** (acceso desde celular o cualquier lugar):
-- Vercel (hosting): $0/mes plan gratuito
-- Base de datos en la nube: $0/mes (Supabase o Neon, plan gratuito)
-- Costo total en la nube: **$0/mes**
+| Servicio | Proveedor | Costo |
+|---------|-----------|-------|
+| Aplicación CRM (código) | Propio | $0 |
+| Hosting web | Vercel (plan gratuito) | $0/mes |
+| Base de datos en la nube | Neon PostgreSQL (plan gratuito) | $0/mes |
+| Inteligencia Artificial | Groq API (plan gratuito) | $0/mes |
+| Repositorio de código | GitHub (plan gratuito) | $0/mes |
+| **Total** | | **$0/mes** |
 
 ---
 
@@ -208,3 +215,4 @@ No es un software complicado. Es una herramienta práctica, en español colombia
 ---
 
 *Desarrollado a medida para Cartones América — Colombia 2026*
+*Sistema activo en: https://crm-cartones.vercel.app*

@@ -1,10 +1,11 @@
 # Documento de Contexto — CRM Comercial Catrones América
 
-**Versión:** 1.1
+**Versión:** 1.2
 **Fecha:** Marzo 2026
 **Proyecto:** CRM para fuerza de ventas de Cartones América Colombia
 **Repositorio:** https://github.com/Jvasco1152/crm_cartones
-**Estado:** Producción — desplegado en Vercel + Neon PostgreSQL
+**URL Producción:** https://crm-cartones.vercel.app
+**Estado:** ACTIVO en producción — Vercel + Neon PostgreSQL + Groq IA
 
 ---
 
@@ -244,7 +245,7 @@ El archivo `prisma/seed.js` carga automáticamente datos realistas para Colombia
 
 ## 10. Infraestructura de Producción
 
-### Estado actual (v1.1)
+### Estado actual (v1.2) — PRODUCTIVO
 
 | Servicio | Proveedor | Plan | Costo |
 |---------|-----------|------|-------|
@@ -257,23 +258,30 @@ El archivo `prisma/seed.js` carga automáticamente datos realistas para Colombia
 ### Flujo de despliegue
 
 ```
-Código local → git push → GitHub → Vercel (deploy automático) → URL pública
+Código local → git push → GitHub → Vercel (deploy automático ~2 min) → crm-cartones.vercel.app
 ```
 
-Cada vez que se hace `git push` a la rama `main`, Vercel detecta el cambio y redeploya automáticamente en ~2 minutos.
+Cada `git push` a `main` dispara un redeploy automático en Vercel. Sin intervención manual.
 
-### Variables configuradas en Vercel
-- `DATABASE_URL` — Neon pooled connection
-- `DIRECT_URL` — Neon direct connection
+### Incidentes resueltos en puesta en producción
+
+| Problema | Causa | Solución aplicada |
+|---------|-------|-------------------|
+| Error 500 en todas las APIs | Prisma sin `binaryTargets` para Linux de Vercel | Agregar `rhel-openssl-1.0.x` y `rhel-openssl-3.0.x` en `schema.prisma` |
+| "Can't reach database server" | Typo en `DATABASE_URL` dentro de Vercel (`neon.ech` en vez de `neon.tech`) | Corregir URL en variables de entorno de Vercel |
+
+### Variables configuradas en Vercel (producción)
+- `DATABASE_URL` — Neon pooled connection (con `-pooler` en hostname)
+- `DIRECT_URL` — Neon direct connection (sin `-pooler`, para migraciones)
 - `GROQ_API_KEY` — Groq API key
 
 ### Seguridad actual
-- `.env` excluido de git (`.gitignore`)
-- Base de datos con SSL obligatorio (`sslmode=require`)
-- Sin autenticación (aplicación de uso personal/interno)
+- `.env` excluido de git (`.gitignore`) — credenciales nunca en repositorio
+- Base de datos con SSL obligatorio (`sslmode=require & channel_binding=require`)
+- Sin autenticación (aplicación de uso personal/interno por una sola usuaria)
 
-### Para agregar autenticación (próxima versión)
-Instalar **NextAuth.js** con proveedor Google o Credentials. Requiere agregar variable `NEXTAUTH_SECRET` en Vercel.
+### Para agregar autenticación (próxima versión recomendada)
+Instalar **NextAuth.js** con proveedor Google o Credentials. Requiere agregar `NEXTAUTH_SECRET` en Vercel y una pantalla de login.
 
 ### Comandos de mantenimiento
 
