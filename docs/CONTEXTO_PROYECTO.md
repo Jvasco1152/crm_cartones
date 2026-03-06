@@ -1,8 +1,10 @@
 # Documento de Contexto — CRM Comercial Catrones América
 
-**Versión:** 1.0
+**Versión:** 1.1
 **Fecha:** Marzo 2026
 **Proyecto:** CRM para fuerza de ventas de Cartones América Colombia
+**Repositorio:** https://github.com/Jvasco1152/crm_cartones
+**Estado:** Producción — desplegado en Vercel + Neon PostgreSQL
 
 ---
 
@@ -35,7 +37,9 @@ Antes del CRM, el seguimiento se hacía en hojas de cálculo o notas sueltas, lo
 |------|-----------|-------------------|
 | Frontend | React 18 + Next.js 16 | Full-stack en un solo proyecto, sin configuración extra |
 | Routing/API | Next.js App Router | API routes integradas, sin servidor Express separado |
-| Base de datos | SQLite via Prisma ORM | Sin necesidad de servidor de base de datos externo, ideal para uso local |
+| Base de datos local | PostgreSQL via Prisma ORM | Migrado de SQLite para compatibilidad con Vercel y producción |
+| Base de datos nube | Neon (PostgreSQL serverless) | Plan gratuito generoso, conexión pooled para serverless |
+| Hosting | Vercel | Deploy automático desde GitHub, plan gratuito, CDN global |
 | Estilos | TailwindCSS 3 | Desarrollo rápido, diseño consistente |
 | IA | Groq API (llama-3.3-70b-versatile) | Inferencia ultrarrápida, plan gratuito generoso |
 | Iconos | Lucide React | Librería ligera y consistente |
@@ -78,8 +82,11 @@ CRM Comercial Catrones/
 ├── prisma/
 │   ├── schema.prisma             # Modelos de base de datos
 │   └── seed.js                   # Datos de muestra colombianos
-├── .env                          # Variables de entorno (local)
-└── dev.db                        # Base de datos SQLite (generada)
+├── docs/
+│   ├── CONTEXTO_PROYECTO.md      # Este documento
+│   └── PROPUESTA_CLIENTE.md      # Documento comercial para cliente
+├── .env                          # Variables de entorno (local, NO en git)
+└── .env.example                  # Plantilla de variables requeridas
 ```
 
 ---
@@ -173,10 +180,22 @@ El usuario puede seleccionar un cliente específico antes de chatear. Los datos 
 
 ## 6. Variables de Entorno
 
+Tres variables requeridas tanto en `.env` local como en Vercel:
+
 ```env
-DATABASE_URL="file:./dev.db"     # Ruta a la base de datos SQLite
-GROQ_API_KEY="gsk_..."           # API Key de console.groq.com
+# Base de datos — Neon PostgreSQL (neon.tech)
+DATABASE_URL="postgresql://user:pass@host-pooler.neon.tech/neondb?sslmode=require"
+DIRECT_URL="postgresql://user:pass@host.neon.tech/neondb?sslmode=require"
+
+# IA — Groq (console.groq.com)
+GROQ_API_KEY="gsk_..."
 ```
+
+**Por qué dos URLs de base de datos:**
+- `DATABASE_URL` → URL con connection pooling (PgBouncer). Usada por Prisma en tiempo de ejecución en Vercel (serverless).
+- `DIRECT_URL` → Conexión directa sin pooling. Usada por Prisma para migraciones (`db push`).
+
+> El archivo `.env` está en `.gitignore` y nunca se sube a GitHub. Las credenciales de producción se configuran directamente en el dashboard de Vercel.
 
 ---
 
@@ -209,29 +228,65 @@ El archivo `prisma/seed.js` carga automáticamente datos realistas para Colombia
 
 ## 9. Posibles Expansiones Futuras
 
-| Feature | Descripción |
-|---------|-------------|
-| Multi-usuario | Soporte para varios comerciales con login |
-| Reportes exportables | PDF/Excel de pipeline y actividades |
-| Integración WhatsApp | Envío directo desde el CRM vía Twilio/Meta API |
-| Email integrado | Envío de correos desde el CRM |
-| Notificaciones | Alertas de tareas vencidas por email o push |
-| App móvil | PWA o React Native para uso en campo |
-| Sync Google Calendar | Sincronizar visitas y reuniones |
-| Base de datos PostgreSQL | Para producción en la nube |
-| Dashboard gerencial | Vista agregada para jefes de ventas |
+| Feature | Descripción | Prioridad |
+|---------|-------------|-----------|
+| Multi-usuario con login | Cada comercial con su cuenta y cartera propia (NextAuth.js) | Alta |
+| Dashboard gerencial | Vista consolidada para jefes de ventas con métricas por comercial | Alta |
+| Reportes exportables | Pipeline y actividades en PDF o Excel | Media |
+| Integración WhatsApp Business | Envío de mensajes directamente desde el CRM (Twilio o Meta API) | Media |
+| Email integrado | Redactar y enviar correos desde el CRM (Resend o SendGrid) | Media |
+| Notificaciones automáticas | Alertas por email cuando una tarea vence (cron job en Vercel) | Media |
+| App móvil / PWA | Acceso desde celular para registrar actividades en campo | Baja |
+| Sync Google Calendar | Visitas y reuniones reflejadas en el calendario | Baja |
+| Importar clientes CSV | Carga masiva desde Excel/CSV | Baja |
 
 ---
 
-## 10. Seguridad y Despliegue
+## 10. Infraestructura de Producción
 
-**Estado actual:** Aplicación local para un solo usuario. No requiere autenticación.
+### Estado actual (v1.1)
 
-**Para producción se recomienda:**
-- Migrar SQLite a PostgreSQL (Supabase o Neon — ambos gratuitos)
-- Desplegar en Vercel (compatible con Next.js, deploy con un clic)
-- Agregar NextAuth.js para autenticación
-- Mover `GROQ_API_KEY` a variables de entorno de Vercel
-- Configurar dominio personalizado
+| Servicio | Proveedor | Plan | Costo |
+|---------|-----------|------|-------|
+| Hosting / Deploy | Vercel | Free | $0/mes |
+| Base de datos | Neon PostgreSQL | Free (0.5 GB, 10 GB transferencia) | $0/mes |
+| IA | Groq API | Free (14,400 req/día) | $0/mes |
+| Repositorio | GitHub | Free | $0/mes |
+| **Total** | | | **$0/mes** |
 
-**Costo estimado producción básica:** $0/mes (Vercel free + Supabase free + Groq free tier)
+### Flujo de despliegue
+
+```
+Código local → git push → GitHub → Vercel (deploy automático) → URL pública
+```
+
+Cada vez que se hace `git push` a la rama `main`, Vercel detecta el cambio y redeploya automáticamente en ~2 minutos.
+
+### Variables configuradas en Vercel
+- `DATABASE_URL` — Neon pooled connection
+- `DIRECT_URL` — Neon direct connection
+- `GROQ_API_KEY` — Groq API key
+
+### Seguridad actual
+- `.env` excluido de git (`.gitignore`)
+- Base de datos con SSL obligatorio (`sslmode=require`)
+- Sin autenticación (aplicación de uso personal/interno)
+
+### Para agregar autenticación (próxima versión)
+Instalar **NextAuth.js** con proveedor Google o Credentials. Requiere agregar variable `NEXTAUTH_SECRET` en Vercel.
+
+### Comandos de mantenimiento
+
+```bash
+# Desarrollo local
+npm run dev                # Arrancar servidor (localhost:3000)
+npm run db:studio          # Ver base de datos visualmente (Prisma Studio)
+
+# Base de datos
+npm run db:push            # Aplicar cambios del schema a Neon
+npm run db:seed            # Recargar datos de muestra (borra y recarga)
+
+# Producción
+git push                   # Redeploy automático en Vercel
+npm run build              # Verificar build antes de subir
+```
