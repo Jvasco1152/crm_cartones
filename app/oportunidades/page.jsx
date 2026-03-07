@@ -151,6 +151,7 @@ export default function OportunidadesPage() {
         toast.success('Oportunidad creada')
       } else {
         await fetch(`/api/oportunidades/${selected.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        setOportunidades((prev) => prev.map((o) => o.id === selected.id ? { ...o, ...payload } : o))
         toast.success('Oportunidad actualizada')
       }
       setModal(null)
