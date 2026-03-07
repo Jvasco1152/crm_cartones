@@ -4,14 +4,14 @@ import { Send, Sparkles, User, Bot, Loader2, Trash2, ChevronDown, X } from 'luci
 import clsx from 'clsx'
 
 const QUICK_ACTIONS = [
-  { label: 'Analizar mi pipeline', prompt: 'Analiza mi pipeline actual y dime en qué oportunidades debería enfocarme esta semana para maximizar cierres.' },
-  { label: 'Email de seguimiento', prompt: 'Redacta un email profesional de seguimiento para un cliente que no ha respondido mi cotización hace 3 días. Empresa de alimentos en Bogotá.' },
-  { label: 'Script para llamada', prompt: 'Dame un script para llamar a un cliente prospecto del sector farmacéutico y presentar nuestras cajas de cartón plegadizo certificadas FSC.' },
-  { label: 'Estrategia sector flores', prompt: 'Dame 5 estrategias específicas para aumentar ventas en el sector floricultor colombiano, considerando temporadas y tipos de empaque que necesitan.' },
-  { label: 'Mensaje WhatsApp', prompt: 'Redacta un mensaje de WhatsApp corto y efectivo para reactivar un cliente inactivo hace 2 meses del sector industrial en Barranquilla.' },
-  { label: 'Manejo de objeción precio', prompt: 'Dame argumentos para manejar la objeción "su precio es más alto que la competencia" cuando vendo cajas de cartón corrugado.' },
-  { label: 'Propuesta de valor', prompt: 'Ayúdame a construir una propuesta de valor diferenciadora para Cartones América frente a competidores de embalaje en Colombia.' },
-  { label: 'Recomendaciones cliente nuevo', prompt: 'Tengo una visita mañana con una empresa de bebidas en Cali que produce 50,000 unidades mensuales. ¿Qué debo investigar antes y qué productos recomendar?' },
+  { label: 'Analizar mi pipeline', prompt: 'Analiza mi pipeline actual y dime en qué oportunidades debería enfocarme esta semana para maximizar cierres. Trabajo en Cartones América vendiendo embalaje de cartón corrugado en Antioquia.' },
+  { label: 'Email de seguimiento', prompt: 'Redacta un email profesional de seguimiento para un cliente del sector plásticos en Medellín que no ha respondido mi cotización de cajas corrugadas hace 3 días.' },
+  { label: 'Script para llamada', prompt: 'Dame un script para llamar a un cliente prospecto del sector alimentos en el Área Metropolitana de Medellín y presentarle nuestra oferta de cajas de cartón corrugado de Cartones América.' },
+  { label: 'Estrategia sector flores', prompt: 'Dame 5 estrategias específicas para aumentar ventas en el sector floricultor de Rionegro y el Oriente Antioqueño, considerando temporadas (San Valentín, Día de la Madre) y los tipos de caja que necesitan.' },
+  { label: 'Mensaje WhatsApp', prompt: 'Redacta un mensaje de WhatsApp corto y efectivo para reactivar un cliente del sector cosméticos en Sabaneta que lleva 2 meses sin comprar cajas de Cartones América.' },
+  { label: 'Manejo de objeción precio', prompt: 'Dame argumentos para manejar la objeción "su precio es más alto que la competencia" cuando vendo cajas de cartón corrugado en Antioquia. ¿Cómo defiendo el valor de Cartones América?' },
+  { label: 'Propuesta de valor', prompt: 'Ayúdame a construir una propuesta de valor diferenciadora para Cartones América frente a competidores de embalaje en Antioquia, destacando calidad, servicio y tiempos de entrega.' },
+  { label: 'Preparar visita cliente', prompt: 'Tengo una visita mañana con una empresa del sector mascotas en Itagüí. ¿Qué debo investigar antes, qué preguntas hacer y qué productos de Cartones América recomendar?' },
 ]
 
 function Message({ msg }) {
