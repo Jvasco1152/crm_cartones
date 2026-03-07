@@ -11,7 +11,8 @@ export async function PUT(request, { params }) {
     })
     return NextResponse.json(oportunidad)
   } catch (error) {
-    return NextResponse.json({ error: 'Error actualizando oportunidad' }, { status: 500 })
+    console.error('PUT oportunidad error:', error)
+    return NextResponse.json({ error: 'Error actualizando oportunidad', detail: error?.message }, { status: 500 })
   }
 }
 
