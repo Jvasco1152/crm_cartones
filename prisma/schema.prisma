@@ -10,26 +10,40 @@ datasource db {
 }
 
 model Cliente {
-  id               String        @id @default(cuid())
-  empresa          String
-  nit              String?
-  ciudad           String        @default("Bogotá")
-  segmento         String        @default("Industrial")
-  contacto         String
-  cargo            String?
-  telefono         String?
-  celular          String?
-  email            String?
-  direccion        String?
-  estado           String        @default("Prospecto")
-  volumenMensual   Float?
-  productosInteres String?
-  notas            String?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  oportunidades    Oportunidad[]
-  actividades      Actividad[]
-  tareas           Tarea[]
+  id                 String        @id @default(cuid())
+  empresa            String
+  nit                String?
+  codigoCliente      String?
+  ciudad             String        @default("Medellín")
+  segmento           String        @default("Industrial")
+  marcaProducto      String?
+  contacto           String
+  cargo              String?
+  telefono           String?
+  celular            String?
+  email              String?
+  web                String?
+  direccion          String?
+  estado             String        @default("Prospecto")
+  condicionPago      String?
+  contactoCompras    String?
+  telefonoCompras    String?
+  emailCompras       String?
+  contactoPagos      String?
+  telefonoPagos      String?
+  emailPagos         String?
+  horarioEntregas    String?
+  cierreFacturacion  Int?
+  citasEntrega       String?
+  volumenMensual     Float?
+  productosInteres   String?
+  notas              String?
+  pendientes         String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  oportunidades      Oportunidad[]
+  actividades        Actividad[]
+  tareas             Tarea[]
 }
 
 model Oportunidad {
