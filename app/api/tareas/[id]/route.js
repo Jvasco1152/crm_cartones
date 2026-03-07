@@ -3,9 +3,10 @@ import { prisma } from '@/lib/db'
 
 export async function PUT(request, { params }) {
   try {
+    const { id } = await params
     const body = await request.json()
     const tarea = await prisma.tarea.update({
-      where: { id: params.id },
+      where: { id },
       data: body,
       include: { cliente: { select: { id: true, empresa: true } } },
     })
@@ -17,7 +18,8 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
-    await prisma.tarea.delete({ where: { id: params.id } })
+    const { id } = await params
+    await prisma.tarea.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error) {
     return NextResponse.json({ error: 'Error eliminando tarea' }, { status: 500 })

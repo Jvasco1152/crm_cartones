@@ -3,22 +3,23 @@ import { prisma } from '@/lib/db'
 
 export async function PUT(request, { params }) {
   try {
+    const { id } = await params
     const body = await request.json()
     const oportunidad = await prisma.oportunidad.update({
-      where: { id: params.id },
+      where: { id },
       data: body,
       include: { cliente: { select: { id: true, empresa: true } } },
     })
     return NextResponse.json(oportunidad)
   } catch (error) {
-    console.error('PUT oportunidad error:', error)
-    return NextResponse.json({ error: 'Error actualizando oportunidad', detail: error?.message }, { status: 500 })
+    return NextResponse.json({ error: 'Error actualizando oportunidad' }, { status: 500 })
   }
 }
 
 export async function DELETE(request, { params }) {
   try {
-    await prisma.oportunidad.delete({ where: { id: params.id } })
+    const { id } = await params
+    await prisma.oportunidad.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error) {
     return NextResponse.json({ error: 'Error eliminando oportunidad' }, { status: 500 })

@@ -3,8 +3,9 @@ import { prisma } from '@/lib/db'
 
 export async function GET(request, { params }) {
   try {
+    const { id } = await params
     const cliente = await prisma.cliente.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         oportunidades: { orderBy: { createdAt: 'desc' } },
         actividades: { orderBy: { fecha: 'desc' } },
@@ -20,8 +21,9 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   try {
+    const { id } = await params
     const body = await request.json()
-    const cliente = await prisma.cliente.update({ where: { id: params.id }, data: body })
+    const cliente = await prisma.cliente.update({ where: { id }, data: body })
     return NextResponse.json(cliente)
   } catch (error) {
     return NextResponse.json({ error: 'Error actualizando cliente' }, { status: 500 })
@@ -30,7 +32,8 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
-    await prisma.cliente.delete({ where: { id: params.id } })
+    const { id } = await params
+    await prisma.cliente.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error) {
     return NextResponse.json({ error: 'Error eliminando cliente' }, { status: 500 })
